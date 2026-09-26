@@ -82,9 +82,9 @@
 		  <Private>False</Private>
 		  <HintPath>$(BeatSaberDir)\Libs\Newtonsoft.Json.dll</HintPath>
 		</Reference>
-		<Reference Include="OculusStudios.Platform.Core">
-		  <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\OculusStudios.Platform.Core.dll</HintPath>
-		  <Private>false</Private>
+		<Reference Include="OpenMapVoting">
+			<Private>False</Private>
+			<HintPath>$(BeatSaberDir)\Plugins\OpenMapVoting.dll</HintPath>
 		</Reference>
 		<Reference Include="PlatformUserModel">
 		  <Private>False</Private>
@@ -101,10 +101,6 @@
 		<Reference Include="SongCore">
 		  <Private>False</Private>
 		  <HintPath>$(BeatSaberDir)\Plugins\SongCore.dll</HintPath>
-		</Reference>
-		<Reference Include="Steamworks.NET">
-		  <Private>False</Private>
-		  <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Steamworks.NET.dll</HintPath>
 		</Reference>
 		<Reference Include="Unity.TextMeshPro">
 		  <Private>False</Private>

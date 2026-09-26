@@ -15,7 +15,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using OculusStudios.Platform.Core;
+using OpenMapVoting.Classes;
 using TMPro;
 using UnityEngine;
 using Zenject;
@@ -35,17 +35,15 @@ namespace DiTails.UI
 
         private readonly SiraLog _siraLog;
         private readonly LevelDataService _levelDataService;
-        private readonly IPlatform _platform;
         private readonly DetailContextManager _detailContextManager;
         public static readonly FieldAccessor<ImageView, float>.Accessor IMAGESKEW = FieldAccessor<ImageView, float>.GetAccessor("_skew");
 
         #region Initialization 
 
-        public DetailViewHost(SiraLog siraLog, LevelDataService levelDataService, IPlatform platform, DetailContextManager detailContextManager)
+        public DetailViewHost(SiraLog siraLog, LevelDataService levelDataService, DetailContextManager detailContextManager)
         {
             _siraLog = siraLog;
             _levelDataService = levelDataService;
-            _platform = platform;
             _detailContextManager = detailContextManager;
             _cts = new CancellationTokenSource();
         }
@@ -66,7 +64,7 @@ namespace DiTails.UI
         {
             if (!_didParse)
             {
-                CanVote = _platform.vendor == Vendor.Valve || _platform.vendor == Vendor.Meta;
+                CanVote = true;
 
                 _siraLog.Debug("Doing Initial BSML Parsing of the Detail View");
                 _siraLog.Debug("Getting Manifest Stream");
@@ -200,7 +198,7 @@ namespace DiTails.UI
         {
             if (rating != null)
             {
-                rating.text = string.Format("{0:0%}", value);
+                rating.text = $"{value:0%}";
                 rating.color = Constants.Evaluate(value);
             }
         }
@@ -212,14 +210,16 @@ namespace DiTails.UI
             if (_activeBeatSaverMap != null)
             {
                 VoteLoading = true;
-                _activeBeatSaverMap = await _levelDataService.Vote(_activeBeatSaverMap, upvote, token: _cts.Token);
-                Votes = (_activeBeatSaverMap.Stats.Upvotes + -_activeBeatSaverMap.Stats.Downvotes).ToString();
-                SetRating(_activeBeatSaverMap.Stats.Score);
-
+                VoteResult? voteResult = await OpenMapVoting.Actions.VoteOnMap(_activeBeatSaverMap.Versions[0].Hash.ToUpper(), upvote);
+                if (voteResult?.Stats != null)
+                {
+                    Votes = $"{voteResult.Stats.RelativeVotes}";
+                    SetRating((float)voteResult.Stats.Rating);
+                }
                 VoteLoading = false;
             }
-            
-            CanVote = _platform.vendor == Vendor.Valve || _platform.vendor == Vendor.Meta;
+
+            CanVote = true;
         }
 
         #endregion
