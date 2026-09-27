@@ -131,8 +131,8 @@ namespace DiTails.UI
                 {
                     await votingUpvoteImage.SetImageAsync("DiTails.Resources.arrow.png");
                     await votingDownvoteImage.SetImageAsync("DiTails.Resources.arrow.png");
-                    votingUpvoteImage.DefaultColor = new Color(0.388f, 1f, 0.388f);
-                    votingDownvoteImage.DefaultColor = new Color(1f, 0.188f, 0.188f);
+                    votingUpvoteImage.DefaultColor = ColorSettings.UpvoteColor;
+                    votingDownvoteImage.DefaultColor = ColorSettings.DownvoteColor;
 
                     votingUpvoteImage.transform.localScale = new Vector2(0.9f, 1f);
                     votingDownvoteImage.transform.localScale = new Vector2(0.9f, -1f);
@@ -177,6 +177,8 @@ namespace DiTails.UI
             await SetupVotingButtons();
 
             ShowPanel = false;
+            votingUpvoteImage.DefaultColor = ColorSettings.UpvoteColor;
+            votingDownvoteImage.DefaultColor = ColorSettings.DownvoteColor;
             parserParams?.EmitEvent("show-detail");
             var map = await _levelDataService.GetBeatmap(beatmaplevel, _cts.Token);
             ShowPanel = true;
